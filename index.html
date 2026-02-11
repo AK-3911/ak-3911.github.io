@@ -19,7 +19,6 @@
     a.btn,button.btn{border:0;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;text-decoration:none;font-weight:800;font-size:15px}
     .yes{background:var(--pink);color:white}
     .alt{background:#111827;color:white}
-    .ghost{background:#f3f4f6;color:#111827}
     .heart{display:inline-block;transform:translateY(1px)}
     .topright{position:absolute;top:-90px;right:-120px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd1e3, #ff3b7a);opacity:.22}
     .topleft{position:absolute;bottom:-120px;left:-140px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #dbeafe, #a78bfa);opacity:.18}
@@ -85,7 +84,7 @@
       <div class="divider"></div>
 
       <div class="btns">
-        <button class="btn yes" id="btnYes" type="button">Oui 👩🏻‍❤️‍👨🏻 </button>
+        <button class="btn yes" id="btnYes" type="button">Oui 👩🏻‍❤️‍👨🏻</button>
         <a class="btn alt" href="mailto:?subject=J%27ai%20des%20questions&body=Pose%20moi%20toutes%20les%20questions%20dont%20tu%20as%20besoin%20%3C3">J'ai des questions</a>
       </div>
 
@@ -96,14 +95,32 @@
   <canvas id="confetti"></canvas>
 
   <script>
+    // ✅ attach “Oui” ASAP (même si autre chose plante après)
+    (function(){
+      const btnYes = document.getElementById("btnYes");
+      const modal = document.getElementById("modalRdv");
+      if (!btnYes || !modal) return;
+
+      btnYes.addEventListener("click", () => {
+        // Debug : si tu vois cette alerte, le bouton fonctionne.
+        // Tu peux enlever la ligne après.
+        // alert("Click OK ✅");
+
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden","false");
+        document.body.style.overflow="hidden";
+      });
+    })();
+
+    // Le reste après (confetti + maps + ics)
     document.addEventListener("DOMContentLoaded", () => {
-      // Confetti
       const canvas = document.getElementById("confetti");
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas && canvas.getContext ? canvas.getContext("2d") : null;
       const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       let W, H, pieces = [], raf;
 
       function resize(){
+        if(!canvas) return;
         W = canvas.width = Math.floor(window.innerWidth * DPR);
         H = canvas.height = Math.floor(window.innerHeight * DPR);
         canvas.style.width = window.innerWidth + "px";
@@ -113,9 +130,9 @@
       resize();
 
       function burst(){
+        if(!ctx) return;
         const palette = ["#ff3b7a","#111827","#a78bfa","#60a5fa","#fbbf24","#34d399"];
-        const count = 140;
-        for(let i=0;i<count;i++){
+        for(let i=0;i<140;i++){
           pieces.push({
             x: W/2, y: H*0.28,
             vx: (Math.random()-0.5)*10*DPR,
@@ -131,6 +148,7 @@
       }
 
       function animate(){
+        if(!ctx) return;
         raf = requestAnimationFrame(animate);
         ctx.clearRect(0,0,W,H);
         for(const p of pieces){
@@ -147,25 +165,31 @@
         if(pieces.length === 0 && raf){ cancelAnimationFrame(raf); raf=null; }
       }
 
-      // Modal + RDV
       const modal = document.getElementById("modalRdv");
       const closeBtn = document.getElementById("modalClose");
       const mapsLink = document.getElementById("mapsLink");
       const btnIcs = document.getElementById("btnIcs");
 
       const RDV_ADDRESS = "7 Lieu-dit Pontallec, 56550 Locoal-Mendon";
-      document.getElementById("addrText").textContent = RDV_ADDRESS;
-      mapsLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(RDV_ADDRESS);
+      const addrText = document.getElementById("addrText");
+      if (addrText) addrText.textContent = RDV_ADDRESS;
+      if (mapsLink) mapsLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(RDV_ADDRESS);
 
-      function openModal(){ modal.classList.add("show"); modal.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; }
-      function closeModal(){ modal.classList.remove("show"); modal.setAttribute("aria-hidden","true"); document.body.style.overflow=""; }
+      function closeModal(){
+        if(!modal) return;
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden","true");
+        document.body.style.overflow="";
+      }
 
-      document.getElementById("btnYes").addEventListener("click", () => { burst(); openModal(); });
-      closeBtn.addEventListener("click", closeModal);
-      modal.addEventListener("click", (e) => { if (e.target && e.target.hasAttribute("data-close")) closeModal(); });
-      window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("show")) closeModal(); });
+      if (closeBtn) closeBtn.addEventListener("click", closeModal);
+      if (modal) modal.addEventListener("click", (e) => { if (e.target && e.target.hasAttribute("data-close")) closeModal(); });
+      window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal && modal.classList.contains("show")) closeModal(); });
 
-      // ICS : 2026-02-14 16:00 -> 23:00
+      // Quand on ouvre (bouton Oui), on fait aussi confetti
+      const btnYes = document.getElementById("btnYes");
+      if (btnYes) btnYes.addEventListener("click", burst);
+
       const EVENT = {
         title: "Rendez-vous 💘",
         location: RDV_ADDRESS,
@@ -184,7 +208,6 @@
       function downloadICS(){
         const uid = `${Date.now()}-${Math.random().toString(16).slice(2)}@valentin`;
         const dtstamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0] + "Z";
-
         const ics =
 `BEGIN:VCALENDAR
 VERSION:2.0
@@ -201,7 +224,6 @@ LOCATION:${EVENT.location}
 DESCRIPTION:${EVENT.description}
 END:VEVENT
 END:VCALENDAR`;
-
         const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -213,7 +235,7 @@ END:VCALENDAR`;
         URL.revokeObjectURL(url);
       }
 
-      btnIcs.addEventListener("click", () => {
+      if (btnIcs) btnIcs.addEventListener("click", () => {
         try{ downloadICS(); }
         catch(e){ alert("Impossible de générer le fichier calendrier sur cet appareil."); }
       });
