@@ -15,7 +15,24 @@
     h1{margin:14px 0 6px;font-size:30px;letter-spacing:-.02em}
     p{line-height:1.65;font-size:17px;margin:10px 0;color:#111827}
     .sig{margin-top:18px;font-weight:700}
-    .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+
+    /* ✅ Barre de boutons : Questions au centre, Oui à droite */
+    .btns{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+      width:100%;
+    }
+    .btns .alt{
+      margin-left:auto;
+      margin-right:auto; /* centre le bouton questions */
+    }
+    .btns .yes{
+      margin-left:auto;  /* pousse le bouton oui à droite */
+    }
+
     a.btn,button.btn{border:0;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;text-decoration:none;font-weight:800;font-size:15px}
     .yes{background:var(--pink);color:white}
     .alt{background:#111827;color:white}
@@ -24,8 +41,10 @@
     .topleft{position:absolute;bottom:-120px;left:-140px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #dbeafe, #a78bfa);opacity:.18}
     .divider{height:1px;background:linear-gradient(90deg, transparent, #e5e7eb, transparent);margin:18px 0}
     .photo{margin-top:14px;border-radius:18px;overflow:hidden;background:#f9fafb;border:1px dashed #e5e7eb;display:flex;align-items:center;justify-content:center;min-height:160px;color:#9ca3af;font-weight:700}
+
     canvas{position:fixed;inset:0;pointer-events:none;z-index:-1}
     .card{position:relative;z-index:2}
+
     .modal{position:fixed;inset:0;display:none;z-index:50}
     .modal.show{display:block}
     .modal__backdrop{position:absolute;inset:0;background:rgba(17,24,39,.55)}
@@ -75,35 +94,20 @@
       <p>
         Alors je te le demande MAËLLE,
         <strong>est-ce que tu veux être ma Valentine ?</strong> 💘
-
-
       </p>
 
       <div class="photo">
-        <!-- <img src="photo.jpg" alt="Nous deux"> -->
+        <img src="images.jpeg" alt="Notre dîner" loading="lazy">
       </div>
 
       <div class="divider"></div>
 
       <div class="btns">
-        <button class="btn yes" id="btnYes" type="button" onclick="alert('OK ✅');">Oui 👩🏻‍❤️‍👨🏻</button>
-        
         <a class="btn alt" href="mailto:?subject=J%27ai%20des%20questions&body=Pose%20moi%20toutes%20les%20questions%20dont%20tu%20as%20besoin%20%3C3">J'ai des questions</a>
+        <button class="btn yes" id="btnYes" type="button">Oui 👩🏻‍❤️‍👨🏻</button>
       </div>
 
-
-
-      
       <div class="sig">— Arthur</div>
-      <div class="sig"> </div>
-      <div class="sig"> </div>
-      <div class="sig"> </div>
-      <div class="sig"> </div>
-      <div class="sig"> </div>
-      
-
-
-      
     </div>
   </div>
 
@@ -111,7 +115,6 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Confetti
       const canvas = document.getElementById("confetti");
       const ctx = canvas.getContext("2d");
       const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -160,7 +163,6 @@
         if(pieces.length === 0 && raf){ cancelAnimationFrame(raf); raf=null; }
       }
 
-      // Modal + RDV
       const modal = document.getElementById("modalRdv");
       const closeBtn = document.getElementById("modalClose");
       const mapsLink = document.getElementById("mapsLink");
@@ -182,17 +184,11 @@
         document.body.style.overflow="";
       }
 
-      // ✅ Bouton OUI : confetti + popup
-      btnYes.addEventListener("click", () => {
-        burst();
-        openModal();
-      });
-
+      btnYes.addEventListener("click", () => { burst(); openModal(); });
       closeBtn.addEventListener("click", closeModal);
       modal.addEventListener("click", (e) => { if (e.target && e.target.hasAttribute("data-close")) closeModal(); });
       window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("show")) closeModal(); });
 
-      // ICS : 2026-02-14 16:00 -> 23:00
       const EVENT = {
         title: "Rendez-vous 💘",
         location: RDV_ADDRESS,
