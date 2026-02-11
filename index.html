@@ -95,32 +95,14 @@
   <canvas id="confetti"></canvas>
 
   <script>
-    // ✅ attach “Oui” ASAP (même si autre chose plante après)
-    (function(){
-      const btnYes = document.getElementById("btnYes");
-      const modal = document.getElementById("modalRdv");
-      if (!btnYes || !modal) return;
-
-      btnYes.addEventListener("click", () => {
-        // Debug : si tu vois cette alerte, le bouton fonctionne.
-        // Tu peux enlever la ligne après.
-        // alert("Click OK ✅");
-
-        modal.classList.add("show");
-        modal.setAttribute("aria-hidden","false");
-        document.body.style.overflow="hidden";
-      });
-    })();
-
-    // Le reste après (confetti + maps + ics)
     document.addEventListener("DOMContentLoaded", () => {
+      // Confetti
       const canvas = document.getElementById("confetti");
-      const ctx = canvas && canvas.getContext ? canvas.getContext("2d") : null;
+      const ctx = canvas.getContext("2d");
       const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       let W, H, pieces = [], raf;
 
       function resize(){
-        if(!canvas) return;
         W = canvas.width = Math.floor(window.innerWidth * DPR);
         H = canvas.height = Math.floor(window.innerHeight * DPR);
         canvas.style.width = window.innerWidth + "px";
@@ -130,7 +112,6 @@
       resize();
 
       function burst(){
-        if(!ctx) return;
         const palette = ["#ff3b7a","#111827","#a78bfa","#60a5fa","#fbbf24","#34d399"];
         for(let i=0;i<140;i++){
           pieces.push({
@@ -148,7 +129,6 @@
       }
 
       function animate(){
-        if(!ctx) return;
         raf = requestAnimationFrame(animate);
         ctx.clearRect(0,0,W,H);
         for(const p of pieces){
@@ -165,31 +145,39 @@
         if(pieces.length === 0 && raf){ cancelAnimationFrame(raf); raf=null; }
       }
 
+      // Modal + RDV
       const modal = document.getElementById("modalRdv");
       const closeBtn = document.getElementById("modalClose");
       const mapsLink = document.getElementById("mapsLink");
       const btnIcs = document.getElementById("btnIcs");
+      const btnYes = document.getElementById("btnYes");
 
       const RDV_ADDRESS = "7 Lieu-dit Pontallec, 56550 Locoal-Mendon";
-      const addrText = document.getElementById("addrText");
-      if (addrText) addrText.textContent = RDV_ADDRESS;
-      if (mapsLink) mapsLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(RDV_ADDRESS);
+      document.getElementById("addrText").textContent = RDV_ADDRESS;
+      mapsLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(RDV_ADDRESS);
 
+      function openModal(){
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden","false");
+        document.body.style.overflow="hidden";
+      }
       function closeModal(){
-        if(!modal) return;
         modal.classList.remove("show");
         modal.setAttribute("aria-hidden","true");
         document.body.style.overflow="";
       }
 
-      if (closeBtn) closeBtn.addEventListener("click", closeModal);
-      if (modal) modal.addEventListener("click", (e) => { if (e.target && e.target.hasAttribute("data-close")) closeModal(); });
-      window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal && modal.classList.contains("show")) closeModal(); });
+      // ✅ Bouton OUI : confetti + popup
+      btnYes.addEventListener("click", () => {
+        burst();
+        openModal();
+      });
 
-      // Quand on ouvre (bouton Oui), on fait aussi confetti
-      const btnYes = document.getElementById("btnYes");
-      if (btnYes) btnYes.addEventListener("click", burst);
+      closeBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", (e) => { if (e.target && e.target.hasAttribute("data-close")) closeModal(); });
+      window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("show")) closeModal(); });
 
+      // ICS : 2026-02-14 16:00 -> 23:00
       const EVENT = {
         title: "Rendez-vous 💘",
         location: RDV_ADDRESS,
@@ -235,7 +223,7 @@ END:VCALENDAR`;
         URL.revokeObjectURL(url);
       }
 
-      if (btnIcs) btnIcs.addEventListener("click", () => {
+      btnIcs.addEventListener("click", () => {
         try{ downloadICS(); }
         catch(e){ alert("Impossible de générer le fichier calendrier sur cet appareil."); }
       });
