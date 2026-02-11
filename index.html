@@ -14,7 +14,6 @@
     .badge{display:inline-flex;gap:8px;align-items:center;background:#fff0f6;border:1px solid #ffd1e3;color:#9d174d;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px}
     h1{margin:14px 0 6px;font-size:30px;letter-spacing:-.02em}
     p{line-height:1.65;font-size:17px;margin:10px 0;color:#111827}
-    .muted{color:var(--muted);font-size:14px;margin-top:6px}
     .sig{margin-top:18px;font-weight:700}
     .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
     a.btn,button.btn{border:0;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;text-decoration:none;font-weight:800;font-size:15px}
@@ -22,14 +21,10 @@
     .alt{background:#111827;color:white}
     .ghost{background:#f3f4f6;color:#111827}
     .heart{display:inline-block;transform:translateY(1px)}
-    .topright{position:absolute;top:-90px;right:-120px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd1e3, #ff3b7a);filter:blur(0px);opacity:.22}
+    .topright{position:absolute;top:-90px;right:-120px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffd1e3, #ff3b7a);opacity:.22}
     .topleft{position:absolute;bottom:-120px;left:-140px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #dbeafe, #a78bfa);opacity:.18}
     .divider{height:1px;background:linear-gradient(90deg, transparent, #e5e7eb, transparent);margin:18px 0}
-    .tiny{font-size:12px;color:var(--muted);margin-top:14px}
     .photo{margin-top:14px;border-radius:18px;overflow:hidden;background:#f9fafb;border:1px dashed #e5e7eb;display:flex;align-items:center;justify-content:center;min-height:160px;color:#9ca3af;font-weight:700}
-    .photo img{width:100%;height:auto;display:block}
-    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111827;color:white;padding:10px 14px;border-radius:999px;box-shadow:0 10px 25px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;font-weight:700;font-size:13px}
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
     canvas{position:fixed;inset:0;pointer-events:none}
 
     .modal{position:fixed;inset:0;display:none;z-index:50}
@@ -58,7 +53,6 @@
 
       <div class="btns" style="margin-top:16px">
         <a class="btn alt" id="mapsLink" target="_blank" rel="noopener">Ouvrir dans Maps</a>
-        <button class="btn ghost" id="btnCopyAddr" type="button">Copier l’adresse</button>
         <button class="btn yes" id="btnIcs" type="button">Ajouter au calendrier</button>
       </div>
     </div>
@@ -75,34 +69,26 @@
       <p>Je t'écris pour te convier à un tête à tête.</p>
 
       <p>
-        En ce presque 14 février, je me dois d'inviter la femme que j'aime à passer une soirée avec moi. 
-        Cette femme qui n'a rien fait pour que je l'aime, 
-        qui a juste été elle, et c'était assez,
-        Et c'était déjà tout pour ma tête,
-        Et c'était déjà trop pour mon coeur,
-        Et c'était déjà suffisant pour savoir,
-        Savoir que c'était ELLE.
-        
+        En ce presque 14 février, je me dois d'inviter la femme que j'aime à passer une soirée avec moi.
+        Cette femme qui n'a rien fait pour que je l'aime, qui a juste été elle.
       </p>
 
       <p>
-        Alors je te le demande MAËLLE, 
+        Alors je te le demande MAËLLE,
         <strong>est-ce que tu veux être ma Valentine ?</strong> 💘
       </p>
 
-      <div class="photo"
-        <!-- <img src="photo.jpg" alt="Nous deux">
-        
+      <div class="photo">
+        <!-- <img src="photo.jpg" alt="Nous deux"> -->
       </div>
 
       <div class="divider"></div>
 
       <div class="btns">
-        <button class="btn yes" id="btnYes" type="button">Oui 💘</button>
-        <a class="btn alt" href="mailto:?subject=J'ai%20des%20questions%20&body=Pose%20moi%20toutes%20les%20questions%20dont%20tu%20as%20besoin%20<3">J'ai des questions </a>
-      
+        <button class="btn yes" id="btnYes" type="button">Oui 👩🏻‍❤️‍👨🏻 </button>
+        <a class="btn alt" href="mailto:?subject=J%27ai%20des%20questions&body=Pose%20moi%20toutes%20les%20questions%20dont%20tu%20as%20besoin%20%3C3">J'ai des questions</a>
       </div>
-      
+
       <div class="sig">— Arthur</div>
     </div>
   </div>
@@ -111,6 +97,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Confetti
       const canvas = document.getElementById("confetti");
       const ctx = canvas.getContext("2d");
       const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -160,13 +147,10 @@
         if(pieces.length === 0 && raf){ cancelAnimationFrame(raf); raf=null; }
       }
 
-      const toast = document.getElementById("toast");
-      const showToast = () => { toast.classList.add("show"); setTimeout(()=>toast.classList.remove("show"), 900); };
-
+      // Modal + RDV
       const modal = document.getElementById("modalRdv");
       const closeBtn = document.getElementById("modalClose");
       const mapsLink = document.getElementById("mapsLink");
-      const copyAddrBtn = document.getElementById("btnCopyAddr");
       const btnIcs = document.getElementById("btnIcs");
 
       const RDV_ADDRESS = "7 Lieu-dit Pontallec, 56550 Locoal-Mendon";
@@ -181,22 +165,12 @@
       modal.addEventListener("click", (e) => { if (e.target && e.target.hasAttribute("data-close")) closeModal(); });
       window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("show")) closeModal(); });
 
-      copyAddrBtn.addEventListener("click", async () => {
-        try{ await navigator.clipboard.writeText(RDV_ADDRESS); showToast(); }
-        catch(e){ alert("Adresse : " + RDV_ADDRESS); }
-      });
-
-      document.getElementById("btnCopy").addEventListener("click", async () => {
-        try{ await navigator.clipboard.writeText("Oui Arthur 🥰 Je dis oui !!!"); showToast(); }
-        catch(e){ alert("Copie manuelle : Oui Arthur 🥰 Je dis oui !!!"); }
-      });
-
-      // ICS : 2026-02-14 20:00 -> 22:00
+      // ICS : 2026-02-14 16:00 -> 23:00
       const EVENT = {
         title: "Rendez-vous 💘",
         location: RDV_ADDRESS,
         startLocal: "2026-02-14T16:00",
-        endLocal:   "2026-02-14T00:00",
+        endLocal:   "2026-02-14T23:00",
         description: "St Valentin avec Ton amoureux❤️‍🔥"
       };
 
@@ -240,7 +214,7 @@ END:VCALENDAR`;
       }
 
       btnIcs.addEventListener("click", () => {
-        try{ downloadICS(); showToast(); }
+        try{ downloadICS(); }
         catch(e){ alert("Impossible de générer le fichier calendrier sur cet appareil."); }
       });
     });
