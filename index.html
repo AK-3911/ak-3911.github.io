@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Maëlle 💘</title>
+  <title>Maëlle 🤍</title>
   <meta name="description" content="Une petite surprise pour Maëlle." />
   <style>
     :root{--bg:#fff7fb;--card:#ffffff;--ink:#111827;--muted:#6b7280;--pink:#ff3b7a;--shadow:0 14px 40px rgba(0,0,0,.10)}
@@ -52,7 +52,7 @@
       </div>
 
       <p style="margin:10px 0 0; line-height:1.6">
-        Rendez-vous le <strong>samedi 14 février</strong> à <strong>20h00</strong><br>
+        Rendez-vous le <strong>samedi 14 février</strong> à <strong>16h00</strong><br>
         <span style="opacity:.8">📍</span> <strong id="addrText"></strong>
       </p>
 
@@ -60,10 +60,6 @@
         <a class="btn alt" id="mapsLink" target="_blank" rel="noopener">Ouvrir dans Maps</a>
         <button class="btn ghost" id="btnCopyAddr" type="button">Copier l’adresse</button>
         <button class="btn yes" id="btnIcs" type="button">Ajouter au calendrier</button>
-      </div>
-
-      <div class="tiny" style="margin-top:10px">
-        PS : viens comme tu es. Moi, je serai déjà en train de sourire 😄
       </div>
     </div>
   </div>
@@ -76,39 +72,42 @@
       <div class="badge">Saint-Valentin <span class="heart">💌</span> — pour Maëlle</div>
       <h1>Maëlle,</h1>
 
-      <p>J’ai envie de te dire quelque chose simplement, sans détour.</p>
+      <p>Je t'écris pour te convier à un tête à tête.</p>
 
       <p>
-        Depuis que tu es là, je me sens bien. Il y a plus de sourires, plus d’envie, plus de douceur.
-        Et je me suis rendu compte que je n’ai pas envie que ce soit “juste comme ça”.
+        En ce presque 14 février, je me dois d'inviter la femme que j'aime à passer une soirée avec moi. 
+        Cette femme qui n'a rien fait pour que je l'aime, 
+        qui a juste été elle, et c'était assez,
+        Et c'était déjà tout pour ma tête,
+        Et c'était déjà trop pour mon coeur,
+        Et c'était déjà suffisant pour savoir,
+        Savoir que c'était ELLE.
+        
       </p>
 
       <p>
-        Alors je te le demande :
-        <strong>est-ce que tu veux être ma Valentine… et surtout ma copine ?</strong> 💘
+        Alors je te le demande MAËLLE, 
+        <strong>est-ce que tu veux être ma Valentine ?</strong> 💘
       </p>
 
-      <div class="photo">
-        <!-- <img src="photo.jpg" alt="Nous deux"> -->
-        (tu peux ajouter une photo ici)
+      <div class="photo"
+        <!-- <img src="photo.jpg" alt="Nous deux">
+        
       </div>
 
       <div class="divider"></div>
 
       <div class="btns">
         <button class="btn yes" id="btnYes" type="button">Oui 💘</button>
-        <a class="btn alt" href="mailto:?subject=Je%20veux%20te%20voir%20😄&body=Ok%20mais%20tu%20me%20le%20redis%20en%20vrai%20😄%20Quand%20est-ce%20qu%E2%80%99on%20se%20voit%20?">Je veux te voir 😄</a>
-        <button class="btn ghost" id="btnCopy" type="button">Copier un petit “oui”</button>
+        <a class="btn alt" href="mailto:?subject=J'ai%20des%20questions%20&body=Pose%20moi%20toutes%20les%20questions%20dont%20tu%20as%20besoin%20<3">J'ai des questions </a>
+      
       </div>
-
-      <div class="muted">PS : si tu lis ça, c’est que tu comptes vraiment pour moi.</div>
+      
       <div class="sig">— Arthur</div>
-      <div class="tiny">Astuce : ouvre sur mobile, c’est pensé pour. ✨</div>
     </div>
   </div>
 
   <canvas id="confetti"></canvas>
-  <div class="toast" id="toast">Copié ✅</div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -188,17 +187,17 @@
       });
 
       document.getElementById("btnCopy").addEventListener("click", async () => {
-        try{ await navigator.clipboard.writeText("Oui Arthur 💘 Je dis oui."); showToast(); }
-        catch(e){ alert("Copie manuelle : Oui Arthur 💘 Je dis oui."); }
+        try{ await navigator.clipboard.writeText("Oui Arthur 🥰 Je dis oui !!!"); showToast(); }
+        catch(e){ alert("Copie manuelle : Oui Arthur 🥰 Je dis oui !!!"); }
       });
 
       // ICS : 2026-02-14 20:00 -> 22:00
       const EVENT = {
         title: "Rendez-vous 💘",
         location: RDV_ADDRESS,
-        startLocal: "2026-02-14T20:00",
-        endLocal:   "2026-02-14T22:00",
-        description: "Un rendez-vous avec Arthur 💘"
+        startLocal: "2026-02-14T16:00",
+        endLocal:   "2026-02-14T00:00",
+        description: "St Valentin avec Ton amoureux❤️‍🔥"
       };
 
       function toICSLocal(dtLocal){
